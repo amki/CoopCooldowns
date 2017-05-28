@@ -172,13 +172,14 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 	if prefix ~= MSG_PREFIX then
 		return
 	end
+	print("Message ("..sender.."): "..message)
 	if message:match("^INIT") then
 		local msg, specId = message:match("([^;]+);([^;]+)")
 		Users[sender] = {specId = specId, cdIcons = {}}
 		print("User "..sender.." has specId "..Users[sender].specId)
 		CoopFrame:CreateIcons()
 	elseif message:match("^SUP") then
-		local msg, loctime, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+)")
+		local msg, loctime, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+);([^;]+);([^;]+)")
 		local offset = loctime - GetTime()
 		print("Spellupdate: "..spellId.." s: "..start.." d: "..duration)
 		if Users[sender] == nil then
@@ -187,7 +188,7 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 		end
 		local f = Users[sender]["cdIcons"][tonumber(spellId)]
 		if f ~= nil then
-			f:SetCooldown(start+offset,duration)
+			f:SetCooldown(start-offset,duration)
 		else
 			print("ERROR: Update for non-existing spell icon")
 		end
