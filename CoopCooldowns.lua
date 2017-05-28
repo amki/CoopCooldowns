@@ -112,7 +112,7 @@ local MSG_PREFIX = "CoopHelper"
 local success = RegisterAddonMessagePrefix(MSG_PREFIX)
 CoopFrame:RegisterEvent("CHAT_MSG_ADDON")
 CoopFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
-CoopFrame:RegisterEvent("ADDON_LOADED")
+CoopFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 CoopFrame:ClearAllPoints()
 CoopFrame:SetPoint("CENTER")
@@ -150,9 +150,9 @@ CoopFrame:SetScript("OnEvent", function(self, event_name, ...)
 	end
 end)
 
-function CoopFrame:ADDON_LOADED(event,addon)
+function CoopFrame:PLAYER_ENTERING_WORLD(event,addon)
 	if addon == "CoopCooldowns" then
-		--CoopFrame:RebuildTable()
+		CoopFrame:RebuildTable()
 	end
 end
 
@@ -165,7 +165,6 @@ function CoopFrame:RebuildTable()
 	-- print("Reset Addon Users table")
 	if IsInGroup() or IsInRaid() or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
-		print("I am spec "..playerSpecId)
 		SendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId,RAID)
 	end
 end
@@ -188,7 +187,6 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 			return
 		end
 		local f = Users[sender]["cdIcons"][tonumber(spellId)]
-		print(dump(Users[sender]))
 		if f ~= nil then
 			f:SetCooldown(start,duration)
 		else
@@ -210,13 +208,11 @@ function CoopFrame:CreateIcons()
 			local tex = CoopFrame:CreateTexture()
 			tex:SetTexture(icon)
 			if lastFrame == nil then
-				print("FIRST FRAME")
 				spellCooldown:SetPoint("TOPLEFT",CoopFrame,"TOPLEFT",0,0)
 				spellCooldown:SetSize(iconSize,iconSize)
 				tex:SetPoint("TOPLEFT",CoopFrame,"TOPLEFT",0,0)
 				tex:SetSize(iconSize,iconSize)
 			else
-				print("NEXT FRAME")
 				spellCooldown:ClearAllPoints()
 				spellCooldown:SetPoint("TOPLEFT",lastFrame,"BOTTOMLEFT",0,-5)
 				spellCooldown:SetSize(iconSize,iconSize)
