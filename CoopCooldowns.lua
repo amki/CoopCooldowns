@@ -171,6 +171,7 @@ function CoopFrame:RebuildTable()
 				tex:Hide()
 			end
 		end
+		Users[name].userFrame:Hide()
 	end
 	-- print("Reset Addon Users table")
 	if IsInGroup() or IsInRaid() or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
