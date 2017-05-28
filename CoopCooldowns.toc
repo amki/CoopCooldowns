@@ -1,0 +1,5 @@
+## Interface: 70200
+## Title: CoopCooldowns
+## Version: 0.0.1
+## Notes: Helps tanks and healers coordinate cooldown usage
+CoopCooldowns.lua
