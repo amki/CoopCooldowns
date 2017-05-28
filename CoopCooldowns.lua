@@ -32,7 +32,11 @@ local CooldownSpells = {
 	-- Feral
 	[103] = {},
 	-- Guardian
-	[104] = {},
+	[104] = {
+		[61336] = true,
+		[22812] = true,
+		[200851] = true,
+	},
 	-- Restoration
 	[105] = {
 		[48438] = true,
@@ -187,6 +191,13 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 			print("Creating entry for "..sender)
 			Users[sender] = {specId = specId, cdIcons = {}}
 		else
+			local cdspells = CooldownSpells[tonumber(Users[sender].specId)]
+			for spellId,val in pairs(cdspells) do
+				local f = Users[sender]["cdIcons"][spellId]
+				if f ~= nil then
+					f:Hide()
+				end
+			end
 			Users[sender].specId = specId
 		end
 		CoopFrame:CreateIcons(sender)
