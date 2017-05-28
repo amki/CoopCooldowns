@@ -150,10 +150,8 @@ CoopFrame:SetScript("OnEvent", function(self, event_name, ...)
 	end
 end)
 
-function CoopFrame:PLAYER_ENTERING_WORLD(event,addon)
-	if addon == "CoopCooldowns" then
-		CoopFrame:RebuildTable()
-	end
+function CoopFrame:PLAYER_ENTERING_WORLD(event)
+	CoopFrame:RebuildTable()
 end
 
 function CoopFrame:GROUP_ROSTER_UPDATE(event,...)
@@ -180,7 +178,8 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 		print("User "..sender.." has specId "..Users[sender].specId)
 		CoopFrame:CreateIcons()
 	elseif message:match("^SUP") then
-		local msg, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+)")
+		local msg, loctime, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+)")
+		local offset = loctime - GetTime()
 		print("Spellupdate: "..spellId.." s: "..start.." d: "..duration)
 		if Users[sender] == nil then
 			print("ERROR: Got SUP from someone who was not initiated.")
@@ -188,7 +187,7 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 		end
 		local f = Users[sender]["cdIcons"][tonumber(spellId)]
 		if f ~= nil then
-			f:SetCooldown(start,duration)
+			f:SetCooldown(start+offset,duration)
 		else
 			print("ERROR: Update for non-existing spell icon")
 		end
@@ -233,7 +232,7 @@ function CoopFrame:SPELL_UPDATE_COOLDOWN(event,...)
 	print("Player has spec: "..playerSpecId)
 	for spellId,val in pairs(CooldownSpells[playerSpecId]) do
 		local start, duration, enabled = GetSpellCooldown(spellId);
-		SendAddonMessage(MSG_PREFIX,"SUP;"..spellId..";"..start..";"..duration..";"..enabled,RAID)
+		SendAddonMessage(MSG_PREFIX,"SUP;"..GetTime()..";"..spellId..";"..start..";"..duration..";"..enabled,RAID)
 	end
 end
 
