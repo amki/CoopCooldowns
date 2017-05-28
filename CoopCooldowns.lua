@@ -125,11 +125,7 @@ CoopFrame.text = CoopFrame:CreateFontString(nil, "BACKGROUND", "PVPInfoTextFont"
 CoopFrame.text:SetAllPoints()
 CoopFrame.text:SetTextHeight(12)
 CoopFrame:SetAlpha(1)
-CoopFrame:SetMovable(true)
-CoopFrame:EnableMouse(true)
-CoopFrame:RegisterForDrag("LeftButton")
-CoopFrame:SetScript("OnDragStart", CoopFrame.StartMoving)
-CoopFrame:SetScript("OnDragStop", CoopFrame.StopMovingOrSizing)
+
 
 function table.pack(...)
   return { n = select("#", ...), ... }
@@ -166,9 +162,13 @@ function CoopFrame:RebuildTable()
 	for name,obj in pairs(Users) do
 		local cdspells = CooldownSpells[tonumber(obj.specId)]
 		for spellId,val in pairs(cdspells) do
-			local f = Users[name]["cdIcons"][spellId]
+			local f = Users[name]["cdIcons"][spellId].cd
+			local tex = Users[name]["cdIcons"][spellId].tex
 			if f ~= nil then
 				f:Hide()
+			end
+			if tex ~= nil then
+				tex:Hide()
 			end
 		end
 	end
@@ -193,9 +193,13 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 		else
 			local cdspells = CooldownSpells[tonumber(Users[sender].specId)]
 			for spellId,val in pairs(cdspells) do
-				local f = Users[sender]["cdIcons"][spellId]
+				local f = Users[sender]["cdIcons"][spellId].cd
+				local tex = Users[sender]["cdIcons"][spellId].tex
 				if f ~= nil then
 					f:Hide()
+				end
+				if tex ~= nil then
+					tex:Hide()
 				end
 			end
 			Users[sender].specId = specId
@@ -208,7 +212,7 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 			print("ERROR: Got SUP from someone who was not initiated.")
 			return
 		end
-		local f = Users[sender]["cdIcons"][tonumber(spellId)]
+		local f = Users[sender]["cdIcons"][tonumber(spellId)].cd
 		if f ~= nil then
 			f:SetCooldown(start-offset,duration)
 		else
@@ -217,30 +221,47 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 	end
 end
 
-local lastFrame = nil
-
 function CoopFrame:CreateIcons(name)
 	local obj = Users[name]
 	print("CreateIcons for "..name)
+	local userFrame = nil
+	if Users[name].userFrame == nil then
+		userFrame = CreateFrame("Frame", nil, CoopFrame)
+		userFrame:SetPoint("TOPLEFT",CoopFrame,"TOPLEFT",0,0)
+		userFrame:SetSize(iconSize,iconSize)
+		userFrame:SetMovable(true)
+		userFrame:EnableMouse(true)
+		userFrame:RegisterForDrag("LeftButton")
+		userFrame:SetScript("OnDragStart", userFrame.StartMoving)
+		userFrame:SetScript("OnDragStop", userFrame.StopMovingOrSizing)
+		Users[name].userFrame = userFrame
+		Users[name].lastFrame = nil
+	else
+		userFrame = Users[name].userFrame
+		userFrame:Show()
+	end
 	local cdspells = CooldownSpells[tonumber(obj.specId)]
 	for spellId,val in pairs(cdspells) do
 		-- If this frame already exists do nothing
 		if Users[name]["cdIcons"][spellId] ~= nil then
 			print("User: "..name.."Frame for spell "..spellId.." exists.")
-			local f = Users[name]["cdIcons"][spellId]
+			local f = Users[name]["cdIcons"][spellId].cd
+			local tex = Users[name]["cdIcons"][spellId].tex
 			f:Show()
+			tex:Show()
 		else
 			print("User: "..name.." Creating Frame for spellId "..spellId)
 			local spellName, rank, icon, castTime, minRange, maxRange = GetSpellInfo(spellId)
-			local spellCooldown = CreateFrame("Cooldown", nil, CoopFrame, "CooldownFrameTemplate")
-			local tex = CoopFrame:CreateTexture()
+			local spellCooldown = CreateFrame("Cooldown", nil, userFrame, "CooldownFrameTemplate")
+			local tex = userFrame:CreateTexture()
 			tex:SetTexture(icon)
-			if lastFrame == nil then
-				spellCooldown:SetPoint("TOPLEFT",CoopFrame,"TOPLEFT",0,0)
+			if Users[name].lastFrame == nil then
+				spellCooldown:SetPoint("TOPLEFT",userFrame,"TOPLEFT",0,0)
 				spellCooldown:SetSize(iconSize,iconSize)
-				tex:SetPoint("TOPLEFT",CoopFrame,"TOPLEFT",0,0)
+				tex:SetPoint("TOPLEFT",userFrame,"TOPLEFT",0,0)
 				tex:SetSize(iconSize,iconSize)
 			else
+				lastFrame = Users[name].lastFrame
 				spellCooldown:ClearAllPoints()
 				spellCooldown:SetPoint("TOPLEFT",lastFrame,"BOTTOMLEFT",0,-5)
 				spellCooldown:SetSize(iconSize,iconSize)
@@ -248,9 +269,9 @@ function CoopFrame:CreateIcons(name)
 				tex:SetPoint("TOPLEFT",lastFrame,"BOTTOMLEFT",0,-5)
 				tex:SetSize(iconSize,iconSize)
 			end
-			lastFrame = spellCooldown
+			Users[name].lastFrame = spellCooldown
 			
-			Users[name]["cdIcons"][spellId] = spellCooldown
+			Users[name]["cdIcons"][spellId] = {userFrame = userFrame, cd = spellCooldown, tex = tex}
 		end
 	end
 end
