@@ -234,8 +234,11 @@ function CoopFrame:CreateIcons(name)
 		userFrame:RegisterForDrag("LeftButton")
 		userFrame:SetScript("OnDragStart", userFrame.StartMoving)
 		userFrame:SetScript("OnDragStop", userFrame.StopMovingOrSizing)
+		local nameFS = userFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+		nameFS:SetPoint("TOPLEFT")
+		nameFS:SetText(name)
 		Users[name].userFrame = userFrame
-		Users[name].lastFrame = nil
+		Users[name].lastFrame = nameFS
 	else
 		userFrame = Users[name].userFrame
 		userFrame:Show()
