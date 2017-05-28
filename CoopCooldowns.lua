@@ -159,7 +159,15 @@ function CoopFrame:GROUP_ROSTER_UPDATE(event,...)
 end
 
 function CoopFrame:RebuildTable()
-	Users = {}
+	for name,obj in pairs(Users) do
+		local cdspells = CooldownSpells[tonumber(obj.specId)]
+		for spellId,val in pairs(cdspells) do
+			local f = Users[name]["cdIcons"][spellId]
+			if f ~= nil then
+				f:Hide()
+			end
+		end
+	end
 	-- print("Reset Addon Users table")
 	if IsInGroup() or IsInRaid() or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
@@ -175,13 +183,16 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 	print("Message ("..sender.."): "..message)
 	if message:match("^INIT") then
 		local msg, specId = message:match("([^;]+);([^;]+)")
-		Users[sender] = {specId = specId, cdIcons = {}}
-		print("User "..sender.." has specId "..Users[sender].specId)
-		CoopFrame:CreateIcons()
+		if Users[sender] == nil then
+			print("Creating entry for "..sender)
+			Users[sender] = {specId = specId, cdIcons = {}}
+		else
+			Users[sender].specId = specId
+		end
+		CoopFrame:CreateIcons(sender)
 	elseif message:match("^SUP") then
 		local msg, loctime, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+);([^;]+);([^;]+)")
 		local offset = loctime - GetTime()
-		print("Spellupdate: "..spellId.." s: "..start.." d: "..duration)
 		if Users[sender] == nil then
 			print("ERROR: Got SUP from someone who was not initiated.")
 			return
@@ -195,15 +206,21 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 	end
 end
 
-function CoopFrame:CreateIcons()
-	local lastFrame = nil
-	for name,obj in pairs(Users) do
-		print("User "..name.." has spec "..obj.specId)
-		local cdspells = CooldownSpells[tonumber(obj.specId)]
-		for spellId,val in pairs(cdspells) do
-			print("spellId "..spellId)
+local lastFrame = nil
+
+function CoopFrame:CreateIcons(name)
+	local obj = Users[name]
+	print("CreateIcons for "..name)
+	local cdspells = CooldownSpells[tonumber(obj.specId)]
+	for spellId,val in pairs(cdspells) do
+		-- If this frame already exists do nothing
+		if Users[name]["cdIcons"][spellId] ~= nil then
+			print("User: "..name.."Frame for spell "..spellId.." exists.")
+			local f = Users[name]["cdIcons"][spellId]
+			f:Show()
+		else
+			print("User: "..name.." Creating Frame for spellId "..spellId)
 			local spellName, rank, icon, castTime, minRange, maxRange = GetSpellInfo(spellId)
-			print("spellName "..spellName)
 			local spellCooldown = CreateFrame("Cooldown", nil, CoopFrame, "CooldownFrameTemplate")
 			local tex = CoopFrame:CreateTexture()
 			tex:SetTexture(icon)
@@ -230,7 +247,6 @@ end
 function CoopFrame:SPELL_UPDATE_COOLDOWN(event,...)
 	print("SPELL_UPDATE_COOLDOWN")
 	local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
-	print("Player has spec: "..playerSpecId)
 	for spellId,val in pairs(CooldownSpells[playerSpecId]) do
 		local start, duration, enabled = GetSpellCooldown(spellId);
 		SendAddonMessage(MSG_PREFIX,"SUP;"..GetTime()..";"..spellId..";"..start..";"..duration..";"..enabled,RAID)
