@@ -4,107 +4,259 @@ local Users = {}
 local CooldownSpells = {
 	-- Mage
 	-- Arcane
-	[62] = {},
+	[62] = {
+		[2139] = true,			-- Counterspell
+		[45438] = true,			-- Ice Block
+	},
 	-- Fire
-	[63] = {},
+	[63] = {
+		[2139] = true,			-- Counterspell
+		[45438] = true,			-- Ice Block
+	},
 	-- Frost
-	[64] = {},
+	[64] = {
+		[2139] = true,			-- Counterspell
+		[45438] = true,			-- Ice Block
+	},
 
 	-- Paladin
 	-- Holy
-	[65] = {},
+	[65] = {
+		[96231] = true,			-- Rebuke
+		[1022] = true,			-- Blessing of Protection
+		[31821] = true,			-- Aura Mastery
+		[6940] = true,			-- Blessing of Sacrifice
+		[642] = true,			-- Divine Shield
+		[31842] = true,			-- Avenging Wrath
+		[633] = true,			-- Lay on Hands
+	},
 	-- Protection
-	[66] = {},
+	[66] = {
+		[96231] = true,			-- Rebuke
+		[1022] = true,			-- Blessing of Protection
+		[6940] = true,			-- Blessing of Sacrifice
+		[642] = true,			-- Divine Shield
+		[633] = true,			-- Lay on Hands
+	},
 	-- Retribution
-	[70] = {},
+	[70] = {
+		[96231] = true,			-- Rebuke
+		[1022] = true,			-- Blessing of Protection
+		[642] = true,			-- Divine Shield
+		[633] = true,			-- Lay on Hands
+	},
 
 	-- Warrior
 	-- Arms
-	[71] = {},
+	[71] = {
+		[132168] = true,		-- Shockwave
+		[6552] = true,			-- Pummel
+		[97462] = true,			-- Commanding Shout
+	},
 	-- Fury
-	[72] = {},
+	[72] = {
+		[132168] = true,		-- Shockwave
+		[6552] = true,			-- Pummel
+		[97462] = true,			-- Commanding Shout
+	},
 	-- Protection
-	[73] = {},
+	[73] = {
+		[132168] = true,		-- Shockwave
+		[6552] = true,			-- Pummel
+	},
 
 	-- Druid
 	-- Balance
-	[102] = {},
+	[102] = {
+		[61391] = true,			-- Typhoon
+		[78675] = true,			-- Solar Beam
+		[20484] = true,			-- Rebirth
+	},
 	-- Feral
-	[103] = {},
+	[103] = {
+		[61391] = true,			-- Typhoon
+		[106839] = true,		-- Skull Bash
+		[20484] = true,			-- Rebirth
+		[77764] = true,			-- Stampeding Roar
+	},
 	-- Guardian
 	[104] = {
-		[61336] = true,
-		[22812] = true,
-		[200851] = true,
+		[61336] = true,			-- Survival Instincts
+		[22812] = true,			-- Barkskin
+		[200851] = true,		-- Rage of the Sleeper
+		[61391] = true,			-- Typhoon
+		[106839] = true,		-- Skull Bash
+		[20484] = true,			-- Rebirth
+		[77761] = true,			-- Stampeding Roar
 	},
 	-- Restoration
 	[105] = {
-		[48438] = true,
-		[22812] = true,
-		[18562] = true
+		[102793] = true,		-- Ursol's Vortex
+		[61391] = true,			-- Typhoon
+		[20484] = true,			-- Rebirth
+		[740] = true,			-- Tranquility
+		[102342] = true,		-- Ironbark
+		[208253] = true,		-- Essence of G'Hanir
 	},
 
 	-- Death Knight
 	-- Blood
-	[250] = {},
+	[250] = {
+		[48707] = true,			-- Anti-Magic Shell
+		[205223] = true,		-- Consumption
+		[108199] = true,		-- Gorefiend's Grasp
+		[49028] = true,			-- Dancing Rune Weapon
+		[55233] = true,			-- Vampiric Blood
+		[47528] = true,			-- Mind Freeze
+		[61999] = true,			-- Raise Ally
+	},
 	-- Frost
-	[251] = {},
+	[251] = {
+		[47528] = true,			-- Mind Freeze
+		[48792] = true,			-- Icebound Fortitude
+		[61999] = true,			-- Raise Ally
+	},
 	-- Unholy
-	[252] = {},
+	[252] = {
+		[47528] = true,			-- Mind Freeze
+		[48792] = true,			-- Icebound Fortitude
+		[42650] = true,			-- Army of the Dead
+		[61999] = true,			-- Raise Ally
+	},
 
 	-- Hunter
 	-- Beast Mastery
-	[253] = {},
+	[253] = {
+		[109248] = true,		-- Binding Shot
+		[147362] = true,		-- Counter Shot
+		[34477] = true,			-- Misdirection
+		[186265] = true,		-- Aspect of the Turtle
+	},
 	-- Marksmanship
-	[254] = {},
+	[254] = {
+		[109248] = true,		-- Binding Shot
+		[147362] = true,		-- Counter Shot
+		[34477] = true,			-- Misdirection
+		[186265] = true,		-- Aspect of the Turtle
+	},
 	-- Survival
-	[255] = {},
+	[255] = {
+		[109248] = true,		-- Binding Shot
+		[187707] = true,		-- Muzzle
+		[186265] = true,		-- Aspect of the Turtle
+	},
 
 	-- Priest
 	-- Discipline
-	[256] = {},
+	[256] = {
+		[62618] = true,			-- Power Word: Barrier
+		[33206] = true,			-- Pain Suppression
+		[204263] = true,		-- Shining Force
+	},
 	-- Holy
-	[257] = {},
+	[257] = {
+		[64843] = true,			-- Divine Hymn
+		[47788] = true,			-- Guardian Spirit
+	},
 	-- Shadow
-	[258] = {},
+	[258] = {
+		[15487] = true,			-- Silence
+		[15286] = true,			-- Vampiric Embrace
+		[205369] = true,		-- Mind Bomb
+	},
 
 	-- Rogue
 	-- Assasination
-	[259] = {},
+	[259] = {
+		[1766] = true,			-- Kick
+		[31224] = true,			-- Cloak of Shadows
+	},
 	-- Outlaw
-	[260] = {},
+	[260] = {
+		[1766] = true,			-- Kick
+		[31224] = true,			-- Cloak of Shadows
+	},
 	-- Sublety
-	[261] = {},
+	[261] = {
+		[1766] = true,			-- Kick
+		[31224] = true,			-- Cloak of Shadows
+	},
 
 	-- Shaman
 	-- Elemental
-	[262] = {},
+	[262] = {
+		[192058] = true, 		-- Lightning Surge Totem
+		[57994] = true,			-- Wind Shear
+		[108281] = true,		-- Ancestral Guidance
+		[20608] = true,			-- Ankh
+	},
 	-- Enhancement
-	[263] = {},
+	[263] = {
+		[192058] = true, 		-- Lightning Surge Totem
+		[57994] = true,			-- Wind Shear
+		[20608] = true,			-- Ankh
+	},
 	-- Restoration
-	[264] = {},
+	[264] = {
+		[192058] = true, 		-- Lightning Surge Totem
+		[57994] = true,			-- Wind Shear
+		[108281] = true,		-- Ancestral Guidance
+		[108280] = true,		-- Healing Tide Totem
+		[98008] = true,			-- Spirit Link Totem
+		[20608] = true,			-- Ankh
+	},
 
 	-- Warlock
 	-- Affliction
-	[265] = {},
+	[265] = {
+		[171140] = true,		-- Shadow Lock
+		[20707] = true,			-- Soulstone
+	},
 	-- Demonology
-	[266] = {},
+	[266] = {
+		[171140] = true,		-- Shadow Lock
+		[20707] = true,			-- Soulstone
+		[30283] = true,			-- Shadowfury
+	},
 	-- Destruction
-	[267] = {},
+	[267] = {
+		[171140] = true,		-- Shadow Lock
+		[20707] = true,			-- Soulstone
+		[30283] = true,			-- Shadowfury
+	},
 
 	-- Monk
 	-- Brewmaster
-	[268] = {},
+	[268] = {
+		[119381] = true,		-- Leg Sweep
+		[116705] = true,		-- Spear Hand Strike
+	},
 	-- Windwalker
-	[269] = {},
+	[269] = {
+		[119381] = true,		-- Leg Sweep
+		[116705] = true,		-- Spear Hand Strike
+	},
 	-- Mistweaver
-	[270] = {},
+	[270] = {
+		[119381] = true,		-- Leg Sweep
+		[116705] = true,		-- Spear Hand Strike
+		[115310] = true,		-- Revival
+		[116849] = true,		-- Life Cocoon
+	},
 
 	-- Demon Hunter
 	-- Havoc
-	[577] = {},
+	[577] = {
+		[179057] = true,		-- Chaos Nova
+		[183752] = true,		-- Consume Magic
+		[196718] = true,		-- Darkness
+		[196555] = true,		-- Netherwalk
+	},
 	-- Vengeance
-	[581] = {}
+	[581] = {
+		[183752] = true,		-- Consume Magic
+		[202138] = true,		-- Sigil of Chains
+	}
 }
 local playerUser = GetUnitName("player",true).."-"..GetRealmName()
 local iconSize = 32
