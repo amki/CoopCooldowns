@@ -359,6 +359,7 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 		end
 		CoopFrame:CreateIcons(sender)
 	elseif message:match("^REQINIT") then
+		local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
 		SendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId,RAID)
 	elseif message:match("^SUP") then
 		local msg, loctime, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+);([^;]+);([^;]+)")
