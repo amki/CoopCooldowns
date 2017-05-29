@@ -326,7 +326,6 @@ function CoopFrame:RebuildTable()
 		end
 		Users[name].userFrame:Hide()
 	end
-	-- print("Reset Addon Users table")
 	if IsInGroup() or IsInRaid() or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
 		SendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId,RAID)
@@ -338,11 +337,10 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 	if prefix ~= MSG_PREFIX then
 		return
 	end
-	print("Message ("..sender.."): "..message)
+	-- print("Message ("..sender.."): "..message)
 	if message:match("^INIT") then
 		local msg, specId = message:match("([^;]+);([^;]+)")
 		if Users[sender] == nil then
-			print("Creating entry for "..sender)
 			Users[sender] = {specId = specId, cdIcons = {}}
 		else
 			local cdspells = CooldownSpells[tonumber(Users[sender].specId)]
@@ -377,7 +375,6 @@ end
 
 function CoopFrame:CreateIcons(name)
 	local obj = Users[name]
-	print("CreateIcons for "..name)
 	local userFrame = nil
 	if Users[name].userFrame == nil then
 		userFrame = CreateFrame("Frame", nil, CoopFrame)
@@ -401,13 +398,11 @@ function CoopFrame:CreateIcons(name)
 	for spellId,val in pairs(cdspells) do
 		-- If this frame already exists do nothing
 		if Users[name]["cdIcons"][spellId] ~= nil then
-			print("User: "..name.."Frame for spell "..spellId.." exists.")
 			local f = Users[name]["cdIcons"][spellId].cd
 			local tex = Users[name]["cdIcons"][spellId].tex
 			f:Show()
 			tex:Show()
 		else
-			print("User: "..name.." Creating Frame for spellId "..spellId)
 			local spellName, rank, icon, castTime, minRange, maxRange = GetSpellInfo(spellId)
 			local spellCooldown = CreateFrame("Cooldown", nil, userFrame, "CooldownFrameTemplate")
 			local tex = userFrame:CreateTexture()
@@ -434,7 +429,6 @@ function CoopFrame:CreateIcons(name)
 end
 
 function CoopFrame:SPELL_UPDATE_COOLDOWN(event,...)
-	print("SPELL_UPDATE_COOLDOWN")
 	local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
 	for spellId,val in pairs(CooldownSpells[playerSpecId]) do
 		local start, duration, enabled = GetSpellCooldown(spellId);
