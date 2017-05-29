@@ -88,6 +88,7 @@ local CooldownSpells = {
 		[106839] = true,		-- Skull Bash
 		[20484] = true,			-- Rebirth
 		[77761] = true,			-- Stampeding Roar
+		[99] = true,			-- Incapacitating Roar
 	},
 	-- Restoration
 	[105] = {
