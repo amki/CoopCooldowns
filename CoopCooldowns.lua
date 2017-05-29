@@ -438,7 +438,9 @@ function CoopFrame:SPELL_UPDATE_COOLDOWN(event,...)
 	local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
 	for spellId,val in pairs(CooldownSpells[playerSpecId]) do
 		local start, duration, enabled = GetSpellCooldown(spellId);
-		SendAddonMessage(MSG_PREFIX,"SUP;"..GetTime()..";"..spellId..";"..start..";"..duration..";"..enabled,RAID)
+		if duration > 5 then
+			SendAddonMessage(MSG_PREFIX,"SUP;"..GetTime()..";"..spellId..";"..start..";"..duration..";"..enabled,RAID)
+		end
 	end
 end
 
