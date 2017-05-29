@@ -68,13 +68,13 @@ local CooldownSpells = {
 	-- Druid
 	-- Balance
 	[102] = {
-		[61391] = true,			-- Typhoon
+		[132469] = true,		-- Typhoon
 		[78675] = true,			-- Solar Beam
 		[20484] = true,			-- Rebirth
 	},
 	-- Feral
 	[103] = {
-		[61391] = true,			-- Typhoon
+		[132469] = true,		-- Typhoon
 		[106839] = true,		-- Skull Bash
 		[20484] = true,			-- Rebirth
 		[77764] = true,			-- Stampeding Roar
@@ -84,7 +84,7 @@ local CooldownSpells = {
 		[61336] = true,			-- Survival Instincts
 		[22812] = true,			-- Barkskin
 		[200851] = true,		-- Rage of the Sleeper
-		[61391] = true,			-- Typhoon
+		[132469] = true,		-- Typhoon
 		[106839] = true,		-- Skull Bash
 		[20484] = true,			-- Rebirth
 		[77761] = true,			-- Stampeding Roar
@@ -92,7 +92,7 @@ local CooldownSpells = {
 	-- Restoration
 	[105] = {
 		[102793] = true,		-- Ursol's Vortex
-		[61391] = true,			-- Typhoon
+		[132469] = true,		-- Typhoon
 		[20484] = true,			-- Rebirth
 		[740] = true,			-- Tranquility
 		[102342] = true,		-- Ironbark
