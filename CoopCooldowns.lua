@@ -305,6 +305,7 @@ end)
 
 function CoopFrame:PLAYER_ENTERING_WORLD(event)
 	CoopFrame:RebuildTable()
+	SendAddonMessage(MSG_PREFIX,"REQINIT",RAID)
 end
 
 function CoopFrame:GROUP_ROSTER_UPDATE(event,...)
@@ -357,6 +358,8 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 			Users[sender].specId = specId
 		end
 		CoopFrame:CreateIcons(sender)
+	elseif message:match("^REQINIT") then
+		SendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId,RAID)
 	elseif message:match("^SUP") then
 		local msg, loctime, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+);([^;]+);([^;]+)")
 		local offset = loctime - GetTime()
