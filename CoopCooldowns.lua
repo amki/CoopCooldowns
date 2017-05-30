@@ -327,7 +327,7 @@ function CoopFrame:RebuildTable()
 		end
 		Users[name].userFrame:Hide()
 	end
-	if IsInGroup() or IsInRaid() or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+	if IsInGroup() or IsInRaid() or IsInLFGDungeon() then
 		local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
 		SendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId,RAID)
 	end
