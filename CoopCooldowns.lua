@@ -158,6 +158,7 @@ local CooldownSpells = {
 	[257] = {
 		[64843] = true,			-- Divine Hymn
 		[47788] = true,			-- Guardian Spirit
+		[200183] = true,         -- Apotheosis
 	},
 	-- Shadow
 	[258] = {
