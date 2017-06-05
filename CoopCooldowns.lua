@@ -71,6 +71,7 @@ local CooldownSpells = {
 		[132469] = true,		-- Typhoon
 		[78675] = true,			-- Solar Beam
 		[20484] = true,			-- Rebirth
+		[29166] = true,			-- Innervate
 	},
 	-- Feral
 	[103] = {
