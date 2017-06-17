@@ -271,6 +271,8 @@ local MSG_PREFIX = "CoopHelper"
 local success = RegisterAddonMessagePrefix(MSG_PREFIX)
 CoopFrame:RegisterEvent("CHAT_MSG_ADDON")
 CoopFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+CoopFrame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+CoopFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 CoopFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 CoopFrame:ClearAllPoints()
@@ -311,6 +313,14 @@ function CoopFrame:PLAYER_ENTERING_WORLD(event)
 end
 
 function CoopFrame:GROUP_ROSTER_UPDATE(event,...)
+	CoopFrame:RebuildTable()
+end
+
+function CoopFrame:ACTIVE_TALENT_GROUP_CHANGED(event,...)
+	CoopFrame:RebuildTable()
+end
+
+function CoopFrame:ZONE_CHANGED_NEW_AREA(event,...)
 	CoopFrame:RebuildTable()
 end
 
