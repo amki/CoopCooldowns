@@ -345,9 +345,8 @@ function CoopFrame:RebuildTable()
 		end
 		Users[name].userFrame:Hide()
 	end
-	local InInstance, InstanceType = IsInInstance()
 	local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
-	maybeSendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId,RAID)
+	maybeSendAddonMessage(MSG_PREFIX,"REQINIT",RAID)
 end
 
 function CoopFrame:CHAT_MSG_ADDON(event,...)
