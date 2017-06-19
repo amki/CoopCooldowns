@@ -108,6 +108,7 @@ local CooldownSpells = {
 		[205223] = true,		-- Consumption
 		[108199] = true,		-- Gorefiend's Grasp
 		[49028] = true,			-- Dancing Rune Weapon
+		[48792] = true,			-- Icebound Fortitude
 		[55233] = true,			-- Vampiric Blood
 		[47528] = true,			-- Mind Freeze
 		[61999] = true,			-- Raise Ally
