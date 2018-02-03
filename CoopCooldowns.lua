@@ -310,7 +310,6 @@ end)
 
 function CoopFrame:PLAYER_ENTERING_WORLD(event)
 	CoopFrame:RebuildTable()
-	maybeSendAddonMessage(MSG_PREFIX,"REQINIT",RAID)
 end
 
 function CoopFrame:GROUP_ROSTER_UPDATE(event,...)
@@ -325,9 +324,11 @@ function CoopFrame:ZONE_CHANGED_NEW_AREA(event,...)
 	CoopFrame:RebuildTable()
 end
 
-function maybeSendAddonMessage(prefix, message, channel)
-	if IsInGroup(LE_PARTY_CATEGORY_HOME) or IsInRaid(LE_PARTY_CATEGORY_HOME) or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
-		SendAddonMessage(prefix,message,channel)
+function maybeSendAddonMessage(prefix, message)
+	if IsInGroup() and not IsInGroup(2) and not IsInRaid() then
+		SendAddonMessage(prefix,message,"PARTY")
+	elseif IsInGroup() and not IsInGroup(2) and IsInRaid() then
+		SendAddonMessage(prefix,message,"RAID")
 	end
 end
 
@@ -347,7 +348,7 @@ function CoopFrame:RebuildTable()
 		Users[name].userFrame:Hide()
 	end
 	local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
-	maybeSendAddonMessage(MSG_PREFIX,"REQINIT",RAID)
+	maybeSendAddonMessage(MSG_PREFIX,"REQINIT")
 end
 
 function CoopFrame:CHAT_MSG_ADDON(event,...)
@@ -377,7 +378,7 @@ function CoopFrame:CHAT_MSG_ADDON(event,...)
 		CoopFrame:CreateIcons(sender)
 	elseif message:match("^REQINIT") then
 		local playerSpecId, _, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
-		maybeSendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId,RAID)
+		maybeSendAddonMessage(MSG_PREFIX,"INIT;"..playerSpecId)
 	elseif message:match("^SUP") then
 		local msg, loctime, spellId, start, duration, enabled = message:match("([^;]+);([^;]+);([^;]+);([^;]+);([^;]+);([^;]+)")
 		local offset = loctime - GetTime()
@@ -454,7 +455,7 @@ function CoopFrame:SPELL_UPDATE_COOLDOWN(event,...)
 	for spellId,val in pairs(CooldownSpells[playerSpecId]) do
 		local start, duration, enabled = GetSpellCooldown(spellId);
 		if duration > 5 then
-			maybeSendAddonMessage(MSG_PREFIX,"SUP;"..GetTime()..";"..spellId..";"..start..";"..duration..";"..enabled,RAID)
+			maybeSendAddonMessage(MSG_PREFIX,"SUP;"..GetTime()..";"..spellId..";"..start..";"..duration..";"..enabled)
 		end
 	end
 end
